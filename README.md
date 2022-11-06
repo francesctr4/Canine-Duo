@@ -24,7 +24,7 @@ _**Code & QA:** Francesc Teruel_
 
 ### GAMEPAD ###
 
-
+#### Not yet implemented ####
 
 ### KEYBOARD ###
 
