@@ -32,3 +32,10 @@ _**Code & QA:** Francesc Teruel_
 
 ### DEBUG KEYS ###
 
+	F1 --> Start from the first level
+	F3 --> Start from the beginning of the current level
+	F4 --> Player instantly dies
+	F5 --> Save the current game state
+	F6 --> Load the previous state 
+	F9 --> View colliders
+	F10 --> God mode
