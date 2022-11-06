@@ -20,13 +20,14 @@ _**Code & QA:** Francesc Teruel_
 
 ## Game controls
 
+### KEYBOARD ###
 
+	  A --> Move left
+	  D --> Move right
+    SPACE --> Jump (do it again mid-air to double jump)
 
 ### GAMEPAD (Not yet implemented) ###
 
-
-
-### KEYBOARD ###
 
 
 ### DEBUG KEYS ###
