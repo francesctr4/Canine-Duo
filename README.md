@@ -22,9 +22,9 @@ _**Code & QA:** Francesc Teruel_
 
 
 
-### GAMEPAD ###
+### GAMEPAD (Not yet implemented) ###
 
-#### Not yet implemented ####
+
 
 ### KEYBOARD ###
 
