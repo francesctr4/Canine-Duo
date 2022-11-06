@@ -29,6 +29,5 @@ _**Code & QA:** Francesc Teruel_
 ### KEYBOARD ###
 
 
-
--- DEBUG KEYS --
+### DEBUG KEYS ###
 
