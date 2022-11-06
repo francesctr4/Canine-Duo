@@ -22,9 +22,9 @@ _**Code & QA:** Francesc Teruel_
 
 ### KEYBOARD ###
 
-	  A --> Move left
-	  D --> Move right
-    SPACE --> Jump (do it again mid-air to double jump)
+	A --> Move left
+	D --> Move right
+   	SPACE --> Jump (do it again mid-air to double jump)
 
 ### GAMEPAD (Not yet implemented) ###
 
