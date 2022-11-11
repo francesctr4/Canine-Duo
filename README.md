@@ -40,4 +40,6 @@ _**Code & QA:** Francesc Teruel_
 	F9 --> View colliders
 	F10 --> God mode
 	
+## DISCLAIMER!
+	
 ![Project_Properties](https://user-images.githubusercontent.com/99948892/201438454-32009201-07b6-47c7-bd9a-e69bd59c5913.png)
