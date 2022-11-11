@@ -12,11 +12,11 @@ _**Code & QA:** Francesc Teruel_
 
 ## Game Description
 
-
+[_Work in progress_]
 
 ## Objective
 
-
+[_Work in progress_]
 
 ## Game controls
 
