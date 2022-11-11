@@ -42,6 +42,6 @@ _**Code & QA:** Francesc Teruel_
 	
 ## DISCLAIMER!
 
-If you want to take a look at the code, remember to change the working directory on the project properties!
+If you want to take a look at the code, remember to change the working directory on the project properties:
 	
 ![Project_Properties](https://user-images.githubusercontent.com/99948892/201438454-32009201-07b6-47c7-bd9a-e69bd59c5913.png)
