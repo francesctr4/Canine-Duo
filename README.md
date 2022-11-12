@@ -21,7 +21,9 @@ _**Code & QA:** Francesc Teruel_
 ## Game controls
 
 ### KEYBOARD ###
-
+	
+	ENTER --> Move through screens
+	
 	A --> Move left
 	D --> Move right
    	SPACE --> Jump (do it again mid-air to double jump)
@@ -32,16 +34,10 @@ _**Code & QA:** Francesc Teruel_
 
 ### DEBUG KEYS ###
 
-	F1 --> Start from the first level
-	F3 --> Start from the beginning of the current level
+	F1 --> Start from the first level (revives the player)
+	F3 --> Start from the beginning of the current level (revives the player)
 	F4 --> Player instantly dies
 	F5 --> Save the current game state
 	F6 --> Load the previous state 
 	F9 --> View colliders
-	F10 --> God mode
-	
-## DISCLAIMER!
-
-If you want to take a look at the code, remember to change the working directory on the project properties:
-	
-![Project_Properties](https://user-images.githubusercontent.com/99948892/201438454-32009201-07b6-47c7-bd9a-e69bd59c5913.png)
+	F10 --> God mode (revives the player)
