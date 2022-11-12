@@ -77,6 +77,7 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+
 	if (enableMusic) {
 
 		app->audio->PlayMusic("Assets/Audio/Music/Level1_Music.ogg", 0);
@@ -132,6 +133,13 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
+	//if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
+
+	//	if (!app->entityManager->IsEnabled()) app->entityManager->Enable();
+	//	else app->entityManager->Disable();
+
+	//}
+
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
 
 		if (!app->physics->debug) app->physics->debug = true;
@@ -159,8 +167,6 @@ bool Scene::Update(float dt)
 
 	//if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	//	app->render->camera.x -= 1;
-
-	// Draw map
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 

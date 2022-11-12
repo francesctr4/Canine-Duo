@@ -53,16 +53,14 @@ bool SceneTitle::Start()
 bool SceneTitle::PreUpdate()
 {
 
+	app->entityManager->Disable();
+
 	if (enableMusic) {
 
 		app->audio->PlayMusic("Assets/Audio/Music/SymphonyOfBorealWind.ogg", 0);
 		enableMusic = false;
 
 	}
-
-	app->entityManager->Disable();
-
-	app->physics->debug = false;
 
 	return true;
 }

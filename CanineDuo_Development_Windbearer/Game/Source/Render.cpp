@@ -89,18 +89,18 @@ bool Render::Update(float dt)
 
 	// CAMERA LIMITS Y
 
-	if (app->scene->player->position.y -192 < 370 && app->scene->player->position.y - 192 > 193) {
+	if (app->scene->player->position.y - 192 < 370 && app->scene->player->position.y - 192 > 193) {
 
 		camera.y = -app->scene->player->position.y + app->win->screenSurface->h / 2 - 16;
 
 	}
-	
+
 	if (app->scene->player->position.y - 192 > 370) {
 
 		camera.y = -192;
 
 	}
-	
+
 	return true;
 }
 

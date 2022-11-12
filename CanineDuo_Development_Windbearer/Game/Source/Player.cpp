@@ -98,6 +98,8 @@ bool Player::Awake() {
 	die_left.loop = false;
 	die_left.speed = 0.1f;
 
+	godMode = false;
+
 	return true;
 }
 
@@ -128,8 +130,6 @@ bool Player::Start() {
 	currentAnimation = &idle_right;
 
 	isJumping = false;
-
-	godMode = false;
 
 	jumpFx = app->audio->LoadFx("Assets/Audio/Fx/JumpFx.wav");
 

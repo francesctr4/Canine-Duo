@@ -28,7 +28,6 @@ bool SceneLogo::Awake(pugi::xml_node& config)
 	LOG("Loading SceneLogo");
 	bool ret = true;
 
-
 	return ret;
 }
 
@@ -45,6 +44,7 @@ bool SceneLogo::Start()
 // Called each loop iteration
 bool SceneLogo::PreUpdate()
 {
+	app->entityManager->Disable();
 
 	if (enableMusic) {
 
@@ -52,8 +52,6 @@ bool SceneLogo::PreUpdate()
 		enableMusic = false;
 
 	}
-
-	app->entityManager->Disable();
 
 	return true;
 }

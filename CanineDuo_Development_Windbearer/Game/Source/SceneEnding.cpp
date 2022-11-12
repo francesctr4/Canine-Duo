@@ -46,6 +46,9 @@ bool SceneEnding::Start()
 // Called each loop iteration
 bool SceneEnding::PreUpdate()
 {
+	app->entityManager->Disable();
+
+	app->physics->debug = false;
 
 	if (enableMusic) {
 
@@ -53,10 +56,6 @@ bool SceneEnding::PreUpdate()
 		enableMusic = false;
 
 	}
-
-	app->entityManager->Disable();
-
-	app->physics->debug = false;
 
 	return true;
 }
