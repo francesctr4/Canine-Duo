@@ -39,5 +39,8 @@ _**Code & QA:** Francesc Teruel_
 	F4 --> Player instantly dies
 	F5 --> Save the current game state
 	F6 --> Load the previous state 
-	F9 --> View colliders
+	F7 --> Kill all enemies (permanent)
+	F8 --> Reset enemies position
+	F9 --> View colliders and paths
 	F10 --> God mode (revives the player)
+	F11 --> Toggle 30 FPS cap
