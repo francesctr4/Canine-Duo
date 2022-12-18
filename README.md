@@ -1,6 +1,6 @@
 # Windbearer by Canine Duo
 
-### Current release version: Alpha
+### Current release version: Beta
 
 ## Team Members
 
