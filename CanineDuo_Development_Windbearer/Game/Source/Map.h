@@ -4,8 +4,12 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "PQueue.h"
+#include "DynArray.h"
 
 #include "PugiXml\src\pugixml.hpp"
+
+#define COST_MAP_SIZE 25
 
 // L04: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
@@ -130,6 +134,12 @@ public:
 
 	// L05: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
+
+	// L08: DONE 3: Add method WorldToMap to obtain  
+	iPoint Map::WorldToMap(int x, int y);
+
+	// L12: Create walkability map for pathfinding
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 private:
 

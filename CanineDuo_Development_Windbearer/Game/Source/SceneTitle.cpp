@@ -69,10 +69,10 @@ bool SceneTitle::PreUpdate()
 bool SceneTitle::Update(float dt)
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_START] == KEY_DOWN) {
 
 		enableMusic = true;
-		app->fadeToBlack->Fade(this, (Module*)app->scene, dt);
+		app->fadeToBlack->Fade(this, (Module*)app->scene, 0);
 
 	}
 
@@ -95,7 +95,7 @@ bool SceneTitle::PostUpdate()
 
 	//app->fonts->BlitText(116 + 400, 180 + 200, WindjammersFont, "SAMPLE TEXT");
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_BACK] == KEY_DOWN)
 		ret = false;
 
 	return ret;

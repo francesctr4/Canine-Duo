@@ -9,6 +9,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "Window.h"
+#include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #ifdef _DEBUG
@@ -58,6 +59,8 @@ bool Physics::PreUpdate()
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
+
+
 
 	return ret;
 }
@@ -124,7 +127,7 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	return pbody;
 }
 
-PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type)
+PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type, ColliderType ctype)
 {
 	b2BodyDef body;
 
@@ -148,6 +151,7 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	pbody->ctype = ctype;
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
@@ -155,7 +159,39 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	return pbody;
 }
 
-PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type)
+PhysBody* Physics::CreateCircleSensor(int x, int y, int radious, bodyType type, ColliderType ctype) {
+
+	b2BodyDef body;
+
+	if (type == DYNAMIC) body.type = b2_dynamicBody;
+	if (type == STATIC) body.type = b2_staticBody;
+	if (type == KINEMATIC) body.type = b2_kinematicBody;
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2CircleShape circle;
+	circle.m_radius = PIXEL_TO_METERS(radious);
+
+	b2FixtureDef fixture;
+	fixture.shape = &circle;
+	fixture.density = 2.0f;
+	fixture.isSensor = true;
+	b->ResetMassData();
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->ctype = ctype;
+	b->SetUserData(pbody);
+	pbody->width = radious * 0.5f;
+	pbody->height = radious * 0.5f;
+
+	return pbody;
+}
+
+PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type, ColliderType ctype)
 {
 	b2BodyDef body;
 
@@ -186,7 +222,7 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 	delete p;
 
 	PhysBody* pbody = new PhysBody();
-	pbody->ctype = ColliderType::PLATFORM;
+	pbody->ctype = ctype;
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
@@ -217,6 +253,7 @@ bool Physics::PostUpdate()
 					app->win->GetWindowSize(width, height);
 					b2Vec2 pos = f->GetBody()->GetPosition();
 					app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
+
 				}
 				break;
 
@@ -368,6 +405,18 @@ void Physics::BeginContact(b2Contact* contact)
 
 	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+void Physics::EndContact(b2Contact* contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollisionEnd(physA, physB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollisionEnd(physB, physA);
 }
 
 b2RevoluteJoint* Physics::CreateRevoluteJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, float angle, bool collideConnected, bool enableLimit)

@@ -5,17 +5,21 @@
 	<textures />
 	<audio />
 	<:anonymous />
+	<pathfinding />
 	<sceneLogo />
 	<sceneTitle />
 	<scene />
 	<sceneEnding />
 	<entitymanager>
-		<player x="993" y="515" />
+		<player x="37" y="896" />
+		<enemy x="818" y="166" />
+		<enemy x="278" y="667" />
+		<enemy x="522" y="667" />
 	</entitymanager>
 	<map />
 	<:anonymous />
 	<:anonymous />
 	<renderer>
-		<camera x="-497" y="-147" />
+		<camera x="0" y="-192" />
 	</renderer>
 </save_state>

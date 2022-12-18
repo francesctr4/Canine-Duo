@@ -60,10 +60,10 @@ bool SceneLogo::PreUpdate()
 bool SceneLogo::Update(float dt)
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_START] == KEY_DOWN) {
 
 		enableMusic = true;
-		app->fadeToBlack->Fade(this, (Module*)app->sceneTitle, dt);
+		app->fadeToBlack->Fade(this, (Module*)app->sceneTitle, 0);
 
 	}
 
@@ -80,7 +80,7 @@ bool SceneLogo::PostUpdate()
 
 	app->render->DrawTexture(canineDuoLogo, 1024/7, 768 / 4 + 172);
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_BACK] == KEY_DOWN)
 		ret = false;
 
 	return ret;

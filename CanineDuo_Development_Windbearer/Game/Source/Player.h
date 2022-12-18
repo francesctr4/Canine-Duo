@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
+#include "Physics.h"
 
 struct SDL_Texture;
 
@@ -36,6 +37,14 @@ public:
 	bool isJumping;
 
 	uint jumpFx = 0;
+
+	// Dash
+
+	/*float dashingTime = 0.2f;
+	float dashForce = 20.0f;
+	float timeCanDash = 1.0f;
+	bool isDashing;
+	bool canDash;*/
 
 private:
 

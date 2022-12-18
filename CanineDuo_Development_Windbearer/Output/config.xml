@@ -2,10 +2,11 @@
   <app>
     <title>Game Development Testbed</title>
     <organization>UPC</organization>
+	<frcap value = "16"/>
   </app>
 
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
@@ -23,12 +24,16 @@
 
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
-    <player x="50" y="896" speed="5" impulse="10" texturepath="Assets/Textures/AnimationSheet_Player.png"/>
-    <!-- <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/> -->
-	<!--<item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/> -->
+    <player x="50" y="896" speed="6" impulse="10" texturepath="Assets/Textures/AnimationSheet_Player.png"/>
+	<enemy type = "walking" x="780" y="144" texturepath="Assets/Textures/WalkingEnemySpritesheet.png"/>
+	<enemy type = "flying" x="256" y="650" texturepath="Assets/Textures/FlyingEnemySpritesheet.png"/>
+	
+	<!-- <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/> -->
+	<!-- <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/> -->
     <!-- <item x="384" y="352" texturepath="Assets/Textures/goldCoin.png"/> -->
     <!-- <item x="200" y="672" texturepath="Assets/Textures/goldCoin.png"/> -->
     <!-- <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/> -->
+	  
   </scene>
 
   <map>

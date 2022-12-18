@@ -1,4 +1,3 @@
-
 #include "App.h"
 #include "Render.h"
 #include "Textures.h"
@@ -28,6 +27,57 @@ bool Map::Awake(pugi::xml_node& config)
 
     mapFileName = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
+
+    return ret;
+}
+
+// L12: Create walkability map for pathfinding
+bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+    bool ret = false;
+    ListItem<MapLayer*>* item;
+    item = mapData.maplayers.start;
+
+    for (item = mapData.maplayers.start; item != NULL; item = item->next)
+    {
+        MapLayer* layer = item->data;
+
+        if (layer->properties.GetProperty("Navigation") != NULL && !layer->properties.GetProperty("Navigation")->value)
+            continue;
+
+        uchar* map = new uchar[layer->width * layer->height];
+        memset(map, 1, layer->width * layer->height);
+
+        for (int y = 0; y < mapData.height; ++y)
+        {
+            for (int x = 0; x < mapData.width; ++x)
+            {
+                int i = (y * layer->width) + x;
+
+                int tileId = layer->Get(x, y);
+                TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+                if (tileset != NULL)
+                {
+                    //According to the mapType use the ID of the tile to set the walkability value
+                    //if (mapData.type == MapTypes::MAPTYPE_ISOMETRIC && tileId == 25) map[i] = 1;
+                    if (mapData.type == MapTypes::MAPTYPE_ORTHOGONAL && tileId == 1514) map[i] = 1;
+                    else map[i] = 0;
+                }
+                else {
+                    //LOG("CreateWalkabilityMap: Invalid tileset found");
+                    map[i] = 0;
+                }
+            }
+        }
+
+        *buffer = map;
+        width = mapData.width;
+        height = mapData.height;
+        ret = true;
+
+        break;
+    }
 
     return ret;
 }
@@ -90,8 +140,43 @@ iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;
 
-    ret.x = x * mapData.tileWidth;
-    ret.y = y * mapData.tileHeight;
+    // L08: DONE 1: Add isometric map to world coordinates
+    if (mapData.type == MAPTYPE_ORTHOGONAL)
+    {
+        ret.x = x * mapData.tileWidth;
+        ret.y = y * mapData.tileHeight;
+    }
+    else if (mapData.type == MAPTYPE_ISOMETRIC)
+    {
+        ret.x = (x - y) * (mapData.tileWidth / 2);
+        ret.y = (x + y) * (mapData.tileHeight / 2);
+    }
+
+    return ret;
+}
+
+// L08: DONE 3: Add method WorldToMap to obtain  map coordinates from screen coordinates
+iPoint Map::WorldToMap(int x, int y)
+{
+    iPoint ret(0, 0);
+
+    if (mapData.type == MAPTYPE_ORTHOGONAL)
+    {
+        ret.x = x / mapData.tileWidth;
+        ret.y = y / mapData.tileHeight;
+    }
+    else if (mapData.type == MAPTYPE_ISOMETRIC)
+    {
+        float halfWidth = mapData.tileWidth * 0.5f;
+        float halfHeight = mapData.tileHeight * 0.5f;
+        ret.x = int((x / halfWidth + y / halfHeight) / 2);
+        ret.y = int((y / halfHeight - x / halfWidth) / 2);
+    }
+    else
+    {
+        LOG("Unknown map type");
+        ret.x = x; ret.y = y;
+    }
 
     return ret;
 }
@@ -255,6 +340,18 @@ bool Map::LoadMap(pugi::xml_node mapFile)
         mapData.width = map.attribute("width").as_int();
         mapData.tileHeight = map.attribute("tileheight").as_int();
         mapData.tileWidth = map.attribute("tilewidth").as_int();
+        mapData.type = MAPTYPE_UNKNOWN;
+
+        // L08: DONE 2: Read the prientation of the map
+        mapData.type = MAPTYPE_UNKNOWN;
+        if (strcmp(map.attribute("orientation").as_string(), "isometric") == 0)
+        {
+            mapData.type = MAPTYPE_ISOMETRIC;
+        }
+        if (strcmp(map.attribute("orientation").as_string(), "orthogonal") == 0)
+        {
+            mapData.type = MAPTYPE_ORTHOGONAL;
+        }
     }
 
     return ret;
@@ -391,20 +488,39 @@ bool Map::LoadObjectLayer(pugi::xml_node& node, MapLayer* objectLayer) {
 
     for (objectNode = node.child("object"); objectNode && ret; objectNode = objectNode.next_sibling("object"))
     {
-        int x = objectNode.attribute("x").as_int();
-        int y = objectNode.attribute("y").as_int();
-
+       
         pugi::xml_node poly = objectNode.child("polygon");
 
-        std::string points = poly.attribute("points").as_string();
+        if (poly) {
 
-        int length = FindVertices(points, ',') * 2;
+            int x = objectNode.attribute("x").as_int();
+            int y = objectNode.attribute("y").as_int();
 
-        int* converted_points = ConvertPolygonVerticesToArray(points, length);
+            std::string points = poly.attribute("points").as_string();
 
-        app->physics->CreateChain(x, y, converted_points, length, bodyType::STATIC);
+            int length = FindVertices(points, ',') * 2;
 
-        delete[] converted_points;
+            int* converted_points = ConvertPolygonVerticesToArray(points, length);
+
+            if (objectLayer->properties.GetProperty("Platform") != NULL && objectLayer->properties.GetProperty("Platform")->value) {
+
+                app->physics->CreateChain(x, y, converted_points, length, bodyType::STATIC, ColliderType::PLATFORM);
+
+            }
+
+            delete[] converted_points;
+
+        }
+        else {
+
+            int x = objectNode.attribute("x").as_int();
+            int y = objectNode.attribute("y").as_int();
+            int width = objectNode.attribute("width").as_float();
+            int height = objectNode.attribute("height").as_float();
+
+            app->physics->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, bodyType::STATIC, ColliderType::SPIKES);
+
+        }
 
     }
 

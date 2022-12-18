@@ -11,6 +11,7 @@ struct Collider;
 enum class EntityType
 {
 	PLAYER,
+	ENEMY,
 	ITEM,
 	UNKNOWN
 };
@@ -71,6 +72,10 @@ public:
 
 	virtual void OnCollision(PhysBody* c1, PhysBody* c2) {
 	
+	};
+
+	virtual void OnCollisionEnd(PhysBody* c1, PhysBody* c2) {
+
 	};
 
 public:

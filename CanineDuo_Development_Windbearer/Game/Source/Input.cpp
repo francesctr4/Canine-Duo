@@ -16,6 +16,7 @@ Input::Input(bool startEnabled) : Module(startEnabled)
 	keyboard = new KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
 	memset(mouseButtons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
+
 }
 
 // Destructor
@@ -31,10 +32,28 @@ bool Input::Awake(pugi::xml_node& config)
 	bool ret = true;
 	SDL_Init(0);
 
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0)
+	{
+		LOG("SDL_GAMECONTROLLER could not initialize! SDL_Error: %s\n", SDL_GetError());
+		ret = false;
+	}
+
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
+	}
+
+	num_controllers = SDL_NumJoysticks();
+
+	for (int i = 0; i < num_controllers; i++) {
+
+		if (SDL_IsGameController(i)) {
+
+			sdl_controllers[i] = SDL_GameControllerOpen(i);
+
+		}
+
 	}
 
 	return ret;
@@ -44,6 +63,7 @@ bool Input::Awake(pugi::xml_node& config)
 bool Input::Start()
 {
 	SDL_StopTextInput();
+
 	return true;
 }
 
@@ -128,6 +148,27 @@ bool Input::PreUpdate()
 				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
 			break;
 		}
+	}
+
+	SDL_GameControllerUpdate();
+
+	for (int i = 0; i < num_controllers; ++i) {
+
+		for (int j = 0; j < SDL_CONTROLLER_BUTTON_MAX; ++j) {
+
+			if (SDL_GameControllerGetButton(sdl_controllers[i], (SDL_GameControllerButton)j))
+				controllers[i].buttons[j] = (controllers[i].buttons[j] == KEY_IDLE) ? KEY_DOWN : KEY_REPEAT;
+			else
+				controllers[i].buttons[j] = (controllers[i].buttons[j] == KEY_REPEAT || controllers[i].buttons[j] == KEY_DOWN) ? KEY_UP : KEY_IDLE;
+		}
+
+		controllers[i].j1_x = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_LEFTX);
+		controllers[i].j1_y = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_LEFTY);
+		controllers[i].j2_x = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_RIGHTX);
+		controllers[i].j2_y = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_RIGHTY);
+		controllers[i].RT = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+		controllers[i].LT = SDL_GameControllerGetAxis(sdl_controllers[i], SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+
 	}
 
 	return true;

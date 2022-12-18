@@ -7,6 +7,8 @@
 #include "Defs.h"
 #include "Log.h"
 
+#include <iostream>
+
 #define VSYNC true
 
 Render::Render(bool startEnabled) : Module(startEnabled)
@@ -61,6 +63,7 @@ bool Render::Start()
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
+
 	return true;
 }
 

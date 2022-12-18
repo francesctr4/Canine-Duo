@@ -64,10 +64,10 @@ bool SceneEnding::PreUpdate()
 bool SceneEnding::Update(float dt)
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_START] == KEY_DOWN) {
 
 		enableMusic = true;
-		app->fadeToBlack->Fade(this, (Module*)app->sceneLogo, dt);
+		app->fadeToBlack->Fade(this, (Module*)app->sceneLogo, 0);
 
 	}
 
@@ -84,7 +84,7 @@ bool SceneEnding::PostUpdate()
 
 	app->render->DrawTexture(endingScreen, 60, 340);
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_BACK] == KEY_DOWN)
 		ret = false;
 
 	return ret;

@@ -138,7 +138,6 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-
 	// L07 TODO 5: Add physics to the player - updated player position using physics
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
@@ -148,6 +147,12 @@ bool Player::Update()
 		b2Vec2 velocity = { 0, pbody->body->GetLinearVelocity().y };
 
 		if (isAlive) {
+
+			if (app->scene->player->position.y > 910) {
+
+				isAlive = false;
+
+			}
 
 			if (!idleDirection) {
 
@@ -174,7 +179,7 @@ bool Player::Update()
 
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) < 0*/) {
 
 				velocity = { -speed, pbody->body->GetLinearVelocity().y };
 				currentAnimation = &run_left;
@@ -182,7 +187,8 @@ bool Player::Update()
 				idleDirection = true;
 
 			}
-			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+
+			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) > 0*/) {
 
 				velocity = { speed, pbody->body->GetLinearVelocity().y };
 				currentAnimation = &run_right;
@@ -190,7 +196,7 @@ bool Player::Update()
 				idleDirection = false;
 
 			}
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
 
 				app->audio->PlayFx(jumpFx);
 
@@ -221,7 +227,7 @@ bool Player::Update()
 
 					currentAnimation = &jump_right;
 
-					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
 
 						currentAnimation->Reset();
 
@@ -232,13 +238,35 @@ bool Player::Update()
 
 					currentAnimation = &jump_left;
 
-					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
 
 						currentAnimation->Reset();
 
 					}
 				}
 			}
+
+			/*if ((app->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_X] == KEY_DOWN) {
+
+				isDashing = true;
+				canDash = false;
+
+				if (!idleDirection) {
+
+					velocity = { dashForce, pbody->body->GetLinearVelocity().y };
+
+					currentAnimation = &run_left;
+
+				}
+				else if (idleDirection) {
+
+					velocity = { -dashForce, pbody->body->GetLinearVelocity().y };
+
+					currentAnimation = &run_right;
+
+				}
+
+			}*/
 
 		}
 
@@ -253,25 +281,25 @@ bool Player::Update()
 	}
 	else {
 
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+		if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_y, 10000, 2) < 0*/) {
 
 			position.y -= speed;
 			currentAnimation = &idle_right;
 
 		}
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+		if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_y, 10000, 2) > 0*/) {
 
 			position.y += speed;
 			currentAnimation = &idle_right;
 
 		}
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) < 0*/) {
 
 			position.x -= speed;
 			currentAnimation = &run_left;
 
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) > 0*/) {
 
 			position.x += speed;
 			currentAnimation = &run_right;
@@ -308,6 +336,55 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		maxJumps = 0;
 		isJumping = false;
 		break;
+	case ColliderType::SPIKES:
+		LOG("Collision SPIKES");
+
+		if (isAlive) {
+
+			if (!idleDirection) {
+
+				currentAnimation = &die_right;
+				isAlive = false;
+
+			}
+			else {
+
+				currentAnimation = &die_left;
+				isAlive = false;
+
+			}
+
+		}
+
+		break;
+
+	case ColliderType::ENEMY:
+		LOG("Collision ENEMY");
+
+		if (isAlive) {
+
+			if (!idleDirection) {
+
+				currentAnimation = &die_right;
+				isAlive = false;
+
+			}
+			else {
+
+				currentAnimation = &die_left;
+				isAlive = false;
+
+			}
+
+		}
+
+		break;
+
+	case ColliderType::ENEMY_SENSOR:
+		LOG("Collision ENEMY_SENSOR");
+
+		break;
+
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;

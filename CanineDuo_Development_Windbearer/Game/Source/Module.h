@@ -73,6 +73,10 @@ public:
 	{
 	}
 
+	virtual void OnCollisionEnd(PhysBody* bodyA, PhysBody* bodyB) 
+	{
+	}
+
 	void Enable()
 	{
 		if (!isEnabled)
