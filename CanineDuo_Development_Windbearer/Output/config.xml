@@ -18,8 +18,8 @@
   </window>
 
   <audio>
-    <music volume="128"/>
-    <fx volume="128"/>
+    <music volume="100"/>
+    <fx volume="100"/>
   </audio>
 
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
@@ -28,11 +28,21 @@
 	<enemy type = "walking" x="780" y="144" texturepath="Assets/Textures/WalkingEnemySpritesheet.png"/>
 	<enemy type = "flying" x="256" y="650" texturepath="Assets/Textures/FlyingEnemySpritesheet.png"/>
 	
-	<!-- <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/> -->
-	<!-- <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/> -->
-    <!-- <item x="384" y="352" texturepath="Assets/Textures/goldCoin.png"/> -->
-    <!-- <item x="200" y="672" texturepath="Assets/Textures/goldCoin.png"/> -->
-    <!-- <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/> -->
+	<item type ="Essence" x="191" y="767" texturepath="Assets/Textures/Essence.png"/> 
+	<item type ="Essence" x="421" y="901" texturepath="Assets/Textures/Essence.png"/> 
+    <item type ="Essence" x="579" y="735" texturepath="Assets/Textures/Essence.png"/> 
+    <item type ="Essence" x="894" y="860" texturepath="Assets/Textures/Essence.png"/> 
+    <item type ="Essence" x="939" y="648" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="1185" y="661" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="769" y="399" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="349" y="364" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="1272" y="217" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="656" y="120" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="Essence" x="64" y="209" texturepath="Assets/Textures/Essence.png"/>
+	<item type ="LifeCrystal" x="33" y="420" texturepath="Assets/Textures/LifeCrystal.png"/>
+	<item type ="LifeCrystal" x="218" y="180" texturepath="Assets/Textures/LifeCrystal.png"/>
+	<item type ="Checkpoint" state = "Disabled" x="448" y="776" texturepath="Assets/Textures/Checkpoint.png" audiopath="Assets/Audio/Fx/Checkpoint.wav"/>
+	<item type ="Checkpoint" state = "Disabled" x="327" y="207" texturepath="Assets/Textures/Checkpoint.png" audiopath="Assets/Audio/Fx/Checkpoint.wav"/>
 	  
   </scene>
 

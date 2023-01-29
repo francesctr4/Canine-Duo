@@ -5,9 +5,12 @@
 
 #include "PugiXml/src/pugixml.hpp"
 
+#include "External/Optick/include/optick.h"
+
 class App;
 // L07 TODO 2: Add Physics Module
 class PhysBody;
+class GuiControl;
 
 class Module
 {
@@ -75,6 +78,11 @@ public:
 
 	virtual void OnCollisionEnd(PhysBody* bodyA, PhysBody* bodyB) 
 	{
+	}
+
+	virtual bool OnGuiMouseClickEvent(GuiControl* control)
+	{
+		return true;
 	}
 
 	void Enable()

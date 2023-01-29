@@ -35,6 +35,8 @@ bool FadeToBlack::Start()
 
 bool FadeToBlack::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::NONE) return true;
 
@@ -63,6 +65,7 @@ bool FadeToBlack::Update(float dt)
 
 bool FadeToBlack::PostUpdate()
 {
+	OPTICK_EVENT();
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::NONE) return true;
 
@@ -77,6 +80,7 @@ bool FadeToBlack::PostUpdate()
 
 bool FadeToBlack::Fade(Module* moduleToDisable, Module* moduleToEnable, float frames)
 {
+	OPTICK_EVENT();
 	bool ret = false;
 
 	// If we are already in a fade process, ignore this call

@@ -10,6 +10,8 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
+#include "External/Optick/include/optick.h"
+
 Map::Map(bool startEnabled) : Module(startEnabled), mapLoaded(false)
 {
     name.Create("map");
@@ -34,6 +36,7 @@ bool Map::Awake(pugi::xml_node& config)
 // L12: Create walkability map for pathfinding
 bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 {
+    OPTICK_EVENT();
     bool ret = false;
     ListItem<MapLayer*>* item;
     item = mapData.maplayers.start;
@@ -84,6 +87,8 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 void Map::Draw()
 {
+    OPTICK_EVENT();
+
     if(mapLoaded == false)
         return;
 
@@ -249,6 +254,7 @@ bool Map::CleanUp()
 // Load new map
 bool Map::Load()
 {
+    OPTICK_EVENT();
     bool ret = true;
 
     pugi::xml_document mapFileXML;

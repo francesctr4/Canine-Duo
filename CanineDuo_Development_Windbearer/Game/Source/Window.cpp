@@ -8,7 +8,7 @@
 
 
 Window::Window(bool startEnabled) : Module(startEnabled)
-{
+{	
 	window = NULL;
 	screenSurface = NULL;
 	name.Create("window");
@@ -25,6 +25,8 @@ bool Window::Awake(pugi::xml_node& config)
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
+	configWindow = config;
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -36,10 +38,10 @@ bool Window::Awake(pugi::xml_node& config)
 		// L01: DONE 6: Load all required configurations from config.xml
 		// Tip: get the name of the child and the attribute value
 		Uint32 flags = SDL_WINDOW_SHOWN;
-		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(); // get from config
-		bool borderless = config.child("bordeless").attribute("value").as_bool(); // get from config
-		bool resizable = config.child("resizable").attribute("value").as_bool(); // get from config
-		bool fullscreen_window = config.child("fullscreen_window").attribute("value").as_bool(); // get from config
+		fullscreen = config.child("fullscreen").attribute("value").as_bool(); // get from config
+		borderless = config.child("bordeless").attribute("value").as_bool(); // get from config
+		resizable = config.child("resizable").attribute("value").as_bool(); // get from config
+		fullscreen_window = config.child("fullscreen_window").attribute("value").as_bool(); // get from config
 
 		width = config.child("resolution").attribute("width").as_int(); //get from config 
 		height = config.child("resolution").attribute("height").as_int();; //get from config 
@@ -65,6 +67,12 @@ bool Window::Awake(pugi::xml_node& config)
 	}
 
 	return ret;
+}
+
+// Called each loop iteration
+bool Window::Update(float dt) {
+
+	return true;
 }
 
 // Called before quitting

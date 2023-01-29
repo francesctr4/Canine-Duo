@@ -7,6 +7,21 @@
 
 struct SDL_Texture;
 
+enum class ItemType {
+
+	ESSENCE,
+	LIFECRYSTAL,
+	CHECKPOINT
+
+};
+
+enum class CheckpointStates {
+
+	ACTIVATED,
+	DISABLED
+
+};
+
 class Item : public Entity
 {
 public:
@@ -22,6 +37,8 @@ public:
 
 	bool CleanUp();
 
+	void OnCollision(PhysBody* physA, PhysBody* physB);
+
 public:
 
 	bool isPicked = false;
@@ -34,6 +51,12 @@ private:
 	//TODO 4: Add a physics to an item
 
 	PhysBody* pbody;
+	ItemType type;
+
+	CheckpointStates checkpointState;
+
+	const char* audioPath;
+	uint checkpointFx;
 
 };
 

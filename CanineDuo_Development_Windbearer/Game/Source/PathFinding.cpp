@@ -4,6 +4,8 @@
 #include "Defs.h"
 #include "Log.h"
 
+#include "External/Optick/include/optick.h"
+
 PathFinding::PathFinding(bool startEnabled) : Module(startEnabled), map(NULL), lastPath(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.Create("pathfinding");
@@ -175,6 +177,8 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
+	OPTICK_EVENT();
+
 	int ret = -1;
 	int iterations = 0;
 

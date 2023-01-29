@@ -28,6 +28,7 @@ class Map;
 //L07 TODO 2: Add Physics module
 class Physics;
 class PathFinding;
+class GuiManager;
 
 class App
 {
@@ -105,6 +106,10 @@ public:
 	//L07 TODO 2: Add Physics module
 	Physics* physics;
 	PathFinding* pathfinding;
+	GuiManager* guiManager;
+
+	uint frames;
+	float dt;
 
 private:
 
@@ -120,9 +125,6 @@ private:
 	// xml_node(s) to read specific branches of the xml
 	pugi::xml_document configFile;
 	pugi::xml_node configNode;
-
-	uint frames;
-	float dt;
 
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
     bool saveGameRequested;
@@ -145,6 +147,8 @@ private:
 	float secondsSinceStartup = 0.0f;
 
 	uint32 maxFrameDuration = 0;
+
+	bool vsyncActive;
 
 };
 

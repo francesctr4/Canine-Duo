@@ -12,6 +12,8 @@
 
 #include <stdlib.h>
 
+#include "External/Optick/include/optick.h"
+
 enum MainState
 {
 	CREATE = 1,
@@ -34,15 +36,15 @@ int main(int argc, char* args[])
 
 	while(state != EXIT)
 	{
-		switch(state)
+		switch (state)
 		{
 			// Allocate the engine --------------------------------------------
-			case CREATE:
+		case CREATE:
 			LOG("CREATION PHASE ===============================");
 
 			app = new App(argc, args);
 
-			if(app != NULL)
+			if (app != NULL)
 				state = AWAKE;
 			else
 				state = FAIL;
@@ -50,9 +52,9 @@ int main(int argc, char* args[])
 			break;
 
 			// Awake all modules -----------------------------------------------
-			case AWAKE:
+		case AWAKE:
 			LOG("AWAKE PHASE ===============================");
-			if(app->Awake() == true)
+			if (app->Awake() == true)
 				state = START;
 			else
 			{
@@ -63,9 +65,9 @@ int main(int argc, char* args[])
 			break;
 
 			// Call all modules before first frame  ----------------------------
-			case START:
+		case START:
 			LOG("START PHASE ===============================");
-			if(app->Start() == true)
+			if (app->Start() == true)
 			{
 				state = LOOP;
 				LOG("UPDATE PHASE ===============================");
@@ -79,8 +81,12 @@ int main(int argc, char* args[])
 
 			// Loop all modules until we are asked to leave ---------------------
 			case LOOP:
-			if(app->Update() == false)
-				state = CLEAN;
+			{
+				OPTICK_FRAME("Main Loop")
+
+				if (app->Update() == false)
+					state = CLEAN;
+			}
 			break;
 
 			// Cleanup allocated memory -----------------------------------------

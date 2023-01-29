@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include <iostream>
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -133,140 +134,147 @@ bool Player::Start() {
 
 	jumpFx = app->audio->LoadFx("Assets/Audio/Fx/JumpFx.wav");
 
+	isDashing = false;
+	canDash = true;
+
+	hitsTaken = 0;
+
+	essenceCollectedFx = app->audio->LoadFx("Assets/Audio/Fx/Essence.wav");
+	lifeCollectedFx = app->audio->LoadFx("Assets/Audio/Fx/LifeCrystal.wav");
+
+	hitFx = app->audio->LoadFx("Assets/Audio/Fx/Hit.wav");
+
+	EndSound = app->audio->LoadFx("Assets/Audio/Fx/EndSound.wav");
+
 	return true;
 }
 
 bool Player::Update()
 {
 	// L07 TODO 5: Add physics to the player - updated player position using physics
-
+	
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
 	if (!godMode) {
 
-		b2Vec2 velocity = { 0, pbody->body->GetLinearVelocity().y };
+		velocity = { 0, pbody->body->GetLinearVelocity().y };
 
-		if (isAlive) {
+		if (!app->scene->pause) {
 
-			if (app->scene->player->position.y > 910) {
+			if (isAlive) {
 
-				isAlive = false;
+				if (app->scene->player->position.y > 910) {
 
-			}
-
-			if (!idleDirection) {
-
-				currentAnimation = &idle_right;
-
-				if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
-
-					currentAnimation = &die_right;
 					isAlive = false;
 
 				}
-
-			}
-			else {
-
-				currentAnimation = &idle_left;
-
-				if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
-
-					currentAnimation = &die_left;
-					isAlive = false;
-
-				}
-
-			}
-
-			if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) < 0*/) {
-
-				velocity = { -speed, pbody->body->GetLinearVelocity().y };
-				currentAnimation = &run_left;
-
-				idleDirection = true;
-
-			}
-
-			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) > 0*/) {
-
-				velocity = { speed, pbody->body->GetLinearVelocity().y };
-				currentAnimation = &run_right;
-
-				idleDirection = false;
-
-			}
-			if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
-
-				app->audio->PlayFx(jumpFx);
-
-				if (maxJumps < 2) {
-
-					isJumping = true;
-
-					if (maxJumps < 1) {
-
-						velocity = { pbody->body->GetLinearVelocity().x, -impulse };
-
-					}
-					else {
-
-						velocity = { pbody->body->GetLinearVelocity().x, (2 * -impulse / 3) };
-				
-					}
-
-					maxJumps++;
-
-				}
-
-			}
-
-			if (isJumping) {
 
 				if (!idleDirection) {
 
-					currentAnimation = &jump_right;
+					currentAnimation = &idle_right;
 
-					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
+					if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
 
-						currentAnimation->Reset();
+						currentAnimation = &die_right;
+						isAlive = false;
 
 					}
 
 				}
 				else {
 
-					currentAnimation = &jump_left;
+					currentAnimation = &idle_left;
 
-					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
+					if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
 
-						currentAnimation->Reset();
+						currentAnimation = &die_left;
+						isAlive = false;
 
 					}
+
 				}
-			}
 
-			/*if ((app->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_X] == KEY_DOWN) {
+				if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) < 0*/) {
 
-				isDashing = true;
-				canDash = false;
-
-				if (!idleDirection) {
-
-					velocity = { dashForce, pbody->body->GetLinearVelocity().y };
-
+					velocity = { -speed, pbody->body->GetLinearVelocity().y };
 					currentAnimation = &run_left;
 
+					idleDirection = true;
+
 				}
-				else if (idleDirection) {
 
-					velocity = { -dashForce, pbody->body->GetLinearVelocity().y };
+				if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) /* || app->input->reduce_val(SDL_IsGameController(0), app->input->controllers[0].j1_x, 10000, 2) > 0*/) {
 
+					velocity = { speed, pbody->body->GetLinearVelocity().y };
 					currentAnimation = &run_right;
 
+					idleDirection = false;
+
+				}
+				if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
+
+					app->audio->PlayFx(jumpFx);
+
+					if (maxJumps < 2) {
+
+						isJumping = true;
+
+						if (maxJumps < 1) {
+
+							velocity = { pbody->body->GetLinearVelocity().x, -impulse };
+
+						}
+						else {
+
+							velocity = { pbody->body->GetLinearVelocity().x, (2 * -impulse / 3) };
+
+						}
+
+						maxJumps++;
+
+					}
+
 				}
 
-			}*/
+				if (isJumping) {
+
+					if (!idleDirection) {
+
+						currentAnimation = &jump_right;
+
+						if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
+
+							currentAnimation->Reset();
+
+						}
+
+					}
+					else {
+
+						currentAnimation = &jump_left;
+
+						if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_A] == KEY_DOWN*/) {
+
+							currentAnimation->Reset();
+
+						}
+					}
+				}
+
+				if ((app->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) /* || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_X] == KEY_DOWN*/) {
+
+					/*app->audio->PlayFx(jumpFx);
+
+					if (!idleDirection) {
+						velocity = { impulse * 20, pbody->body->GetLinearVelocity().y };
+					}
+					else {
+						velocity = { -impulse * 20, pbody->body->GetLinearVelocity().y };
+					}*/
+
+				}
+
+			}
 
 		}
 
@@ -308,6 +316,8 @@ bool Player::Update()
 
 	}
 
+	if (!isAlive) app->audio->PlayFx(EndSound);
+
 	currentAnimation->Update();
 
 	SDL_Rect playerRect = currentAnimation->GetCurrentFrame();
@@ -327,9 +337,21 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	switch (physB->ctype)
 	{
-	case ColliderType::ITEM:
-		LOG("Collision ITEM");
+	case ColliderType::ITEM_ESSENCE:
+		LOG("Collision ESSENCE");
 		// Do something
+
+		app->audio->PlayFx(essenceCollectedFx);
+		app->scene->itemsCollected++;
+
+		break;
+	case ColliderType::ITEM_LIFECRYSTAL:
+		LOG("Collision LIFECRYSTAL");
+		// Do something
+
+		app->audio->PlayFx(lifeCollectedFx);
+		if (hitsTaken > 0) app->scene->player->hitsTaken--;
+
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
@@ -340,6 +362,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision SPIKES");
 
 		if (isAlive) {
+
+			hitsTaken = 3;
+
+			app->audio->PlayFx(hitFx);
 
 			if (!idleDirection) {
 
@@ -361,7 +387,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::ENEMY:
 		LOG("Collision ENEMY");
 
-		if (isAlive) {
+		if (hitsTaken <= 2) hitsTaken++;
+
+		if (hitsTaken <= 3) app->audio->PlayFx(hitFx);
+
+		if (isAlive && hitsTaken > 2) {
 
 			if (!idleDirection) {
 
@@ -388,6 +418,44 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
+	}
+
+}
+
+void Player::Dash() {
+
+	std::cout << "DASHING" << std::endl;
+	isDashing = true;
+	canDash = false;
+
+	if (dashingTimer.ReadMSec() <= dashingTime && isDashing) {
+
+		if (!idleDirection) {
+
+			velocity = { dashForce, pbody->body->GetLinearVelocity().y };
+
+			currentAnimation = &run_left;
+
+		}
+		else if (idleDirection) {
+
+			velocity = { -dashForce, pbody->body->GetLinearVelocity().y };
+
+			currentAnimation = &run_right;
+
+		}
+
+	}
+	else {
+
+		isDashing = false;
+
+	}
+
+	if (dashCooldown.ReadMSec() >= timeCanDash) {
+
+		canDash = true;
+
 	}
 
 }

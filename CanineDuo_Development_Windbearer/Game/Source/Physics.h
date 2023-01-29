@@ -28,7 +28,9 @@ enum bodyType {
 
 enum class ColliderType {
 	PLAYER,
-	ITEM,
+	ITEM_ESSENCE,
+	ITEM_LIFECRYSTAL,
+	ITEM_CHECKPOINT,
 	PLATFORM,
 	SPIKES,
 	ENEMY_SENSOR,

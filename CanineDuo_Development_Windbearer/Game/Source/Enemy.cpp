@@ -390,13 +390,13 @@ bool Enemy::Update()
 	}
 	
 
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
 
 		state = EnemyState::DYING;
 
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->scene->stop - app->scene->start > 1000) {
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->scene->stop - app->scene->start > 1000) {
 
 		isAlive = true;
 		state = EnemyState::IDLE;
@@ -448,10 +448,6 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	switch (physB->ctype)
 	{
-	case ColliderType::ITEM:
-		LOG("Collision ITEM");
-
-		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
 

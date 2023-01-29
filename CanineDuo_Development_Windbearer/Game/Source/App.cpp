@@ -14,12 +14,15 @@
 #include "Map.h"
 #include "Physics.h"
 #include "PathFinding.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <iostream>
 #include <sstream>
+
+#include "External/Optick/include/optick.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -42,6 +45,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneEnding = new SceneEnding(false);
 	entityManager = new EntityManager(true);
 	map = new Map(true);
+	guiManager = new GuiManager(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -60,6 +64,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(fadeToBlack);
 	AddModule(fonts);
+	AddModule(guiManager);
 
 	// Render last to swap buffer
 	AddModule(render);
@@ -105,6 +110,7 @@ bool App::Awake()
 
 		// L14: TODO 1: Read from config file your framerate cap
 		maxFrameDuration = configNode.child("app").child("frcap").attribute("value").as_int();
+		vsyncActive = configNode.child("renderer").child("vsync").attribute("value").as_bool(true);
 
 		ListItem<Module*>* item;
 		item = modules.start;
@@ -194,12 +200,14 @@ bool App::LoadConfig()
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	OPTICK_EVENT();
 	frameTime.Start();
 }
 
 // ---------------------------------------------
 void App::FinishUpdate()
 {
+	OPTICK_EVENT();
 	// L03: DONE 1: This is a good place to call Load / Save methods
 	if (loadGameRequested == true) LoadFromFile();
 	if (saveGameRequested == true) SaveToFile();
@@ -241,6 +249,18 @@ void App::FinishUpdate()
 
 	}
 
+	if (app->sceneTitle->CheckBoxVsync->crossed && app->scene->CheckBoxVsync->crossed) {
+
+		vsyncActive = true;
+
+	}
+
+	if (!app->sceneTitle->CheckBoxVsync->crossed && !app->scene->CheckBoxVsync->crossed) {
+
+		vsyncActive = false;
+
+	}
+
 	float delay = float(maxFrameDuration) - dt;
 
 	PerfTimer delayTimer = PerfTimer();
@@ -256,8 +276,8 @@ void App::FinishUpdate()
 
 	// Shows the time measurements in the window title
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %I64u ",
-		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %I64u Vsync: %s ",
+		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount, vsyncActive ? "On" : "Off");
 
 	app->win->SetTitle(title);
 
@@ -266,6 +286,7 @@ void App::FinishUpdate()
 // Call modules before each loop iteration
 bool App::PreUpdate()
 {
+	OPTICK_EVENT();
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -288,6 +309,7 @@ bool App::PreUpdate()
 // Call modules on each loop iteration
 bool App::DoUpdate()
 {
+	OPTICK_EVENT();
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -310,6 +332,7 @@ bool App::DoUpdate()
 // Call modules after each loop iteration
 bool App::PostUpdate()
 {
+	OPTICK_EVENT();
 	bool ret = true;
 	ListItem<Module*>* item;
 	Module* pModule = NULL;

@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
+#include "Timer.h"
 #include "Physics.h"
 
 struct SDL_Texture;
@@ -38,13 +39,28 @@ public:
 
 	uint jumpFx = 0;
 
+	b2Vec2 velocity;
+
 	// Dash
 
-	/*float dashingTime = 0.2f;
+	void Dash();
+
+	float dashingTime = 200;
 	float dashForce = 20.0f;
-	float timeCanDash = 1.0f;
+	float timeCanDash = 1000;
 	bool isDashing;
-	bool canDash;*/
+	bool canDash;
+
+	Timer dashingTimer;
+	Timer dashCooldown;
+
+	int hitsTaken;
+	uint essenceCollectedFx;
+	uint lifeCollectedFx;
+
+	uint hitFx;
+
+	uint EndSound;
 
 private:
 

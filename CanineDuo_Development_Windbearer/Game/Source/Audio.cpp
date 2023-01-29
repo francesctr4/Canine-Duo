@@ -55,6 +55,9 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	musicVolume = config.child("music").attribute("volume").as_int();
+	fxVolume = config.child("fx").attribute("volume").as_int();
+
 	return ret;
 }
 
@@ -87,6 +90,8 @@ bool Audio::CleanUp()
 // Play a music file
 bool Audio::PlayMusic(const char* path, float fadeTime)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	if(!active)
@@ -134,6 +139,8 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 		}
 	}
 
+	Mix_VolumeMusic(musicVolume);
+
 	LOG("Successfully playing %s", path);
 	return ret;
 }
@@ -141,6 +148,8 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 // Load WAV
 unsigned int Audio::LoadFx(const char* path)
 {
+	OPTICK_EVENT();
+
 	unsigned int ret = 0;
 
 	if(!active)
@@ -156,6 +165,8 @@ unsigned int Audio::LoadFx(const char* path)
 	{
 		fx.Add(chunk);
 		ret = fx.Count();
+
+		Mix_VolumeChunk(chunk, fxVolume);
 	}
 
 	return ret;
@@ -164,6 +175,8 @@ unsigned int Audio::LoadFx(const char* path)
 // Play WAV
 bool Audio::PlayFx(unsigned int id, int repeat)
 {
+	OPTICK_EVENT();
+
 	bool ret = false;
 
 	if(!active)

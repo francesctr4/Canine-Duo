@@ -35,7 +35,13 @@ public:
 private:
 
 	_Mix_Music* music;
-	List<Mix_Chunk *>	fx;
+	
+public:
+
+	List<Mix_Chunk*>	fx;
+	int musicVolume;
+	int fxVolume;
+
 };
 
 #endif // __AUDIO_H__

@@ -3,11 +3,13 @@
 #include "Render.h"
 #include "Scene.h"
 #include "Physics.h"
+#include "SceneTitle.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <iostream>
+#include "External/Optick/include/optick.h"
 
 #define VSYNC true
 
@@ -54,6 +56,14 @@ bool Render::Awake(pugi::xml_node& config)
 
 	}
 
+	//SDL_RenderSetLogicalSize(renderer, 1024, 768);
+
+	//initialise the SDL_ttf library
+	TTF_Init();
+
+	//load a font into memory
+	font = TTF_OpenFont("Assets/Fonts/Toriko.ttf", 40);
+
 	return ret;
 }
 
@@ -70,12 +80,14 @@ bool Render::Start()
 // Called each loop iteration
 bool Render::PreUpdate()
 {
+	OPTICK_EVENT();
 	SDL_RenderClear(renderer);
 	return true;
 }
 
 bool Render::Update(float dt)
 {
+	OPTICK_EVENT();
 	// CAMERA LIMITS X
 
 	if (app->scene->player->position.x > 500 && app->scene->player->position.x < 1072) {
@@ -109,6 +121,8 @@ bool Render::Update(float dt)
 
 bool Render::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -117,6 +131,12 @@ bool Render::PostUpdate()
 // Called before quitting
 bool Render::CleanUp()
 {
+	// Free the font
+	TTF_CloseFont(font);
+
+	//we clean up TTF library
+	TTF_Quit();
+
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 	return true;
@@ -259,6 +279,24 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+bool Render::DrawText(std::string text, int posx, int posy, int w, int h, SDL_Color color) {
+
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	SDL_Rect dstrect = { posx, posy, w, h };
+
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+
+	return true;
 }
 
 // L03: DONE 6: Implement a method to load the state

@@ -46,6 +46,8 @@ bool Physics::Start()
 // 
 bool Physics::PreUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	world->Step(1.0f / 60.0f, 6, 2);
 
@@ -233,6 +235,7 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 // 
 bool Physics::PostUpdate()
 {
+	OPTICK_EVENT();
 	bool ret = true;
 	
 	// Bonus code: this will iterate all objects in the world and draw the circles

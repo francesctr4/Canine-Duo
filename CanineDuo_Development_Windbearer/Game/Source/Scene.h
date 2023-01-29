@@ -7,6 +7,11 @@
 #include "Enemy.h"
 #include "Animation.h"
 #include "List.h"
+#include "GuiManager.h"
+#include "GuiButton.h"
+#include "GuiSlider.h"
+#include "GuiCheckBox.h"
+#include <vector>
 
 struct SDL_Texture;
 
@@ -56,7 +61,7 @@ public:
 	pugi::xml_node configFile;
 
 
-private:
+public:
 
 	SDL_Texture* img;
 
@@ -78,6 +83,53 @@ private:
 	Animation ElysianIdle;
 
 	Animation* currentAnimation;
+
+	SDL_Texture* playerUI;
+	SDL_Texture* essenceUI;
+	SDL_Texture* timeUI;
+
+	SDL_Texture* pauseScreen;
+	bool pause;
+
+	SDL_Texture* OptionsTex;
+	bool showSettings;
+
+	SDL_Texture* resume;
+	GuiButton* Resume;
+
+	SDL_Texture* settings;
+	GuiButton* Settings;
+
+	SDL_Texture* backToTitle;
+	GuiButton* BackToTitle;
+
+	SDL_Texture* exit;
+	GuiButton* Exit;
+
+	// -----------------------
+
+	SDL_Texture* back;
+	GuiButton* Back;
+
+	SDL_Texture* slider;
+	GuiSlider* SliderMusic;
+	GuiSlider* SliderFX;
+
+	SDL_Texture* checkBox;
+	GuiCheckBox* CheckBoxFullscreen;
+	GuiCheckBox* CheckBoxVsync;
+
+	bool startCounting;
+	Timer timeElapsed;
+
+	int itemsCollected;
+
+	uint OpenPause;
+	uint ClosePause;
+
+	std::vector<Item*> checkpoints{};
+
+	int checkpointIterator;
 
 };
 

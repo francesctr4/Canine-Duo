@@ -40,6 +40,9 @@ public:
 
 	List<Entity*> entities;
 
+	int playerX;
+	int playerY;
+
 };
 
 #endif // __ENTITYMANAGER_H__

@@ -44,6 +44,7 @@ bool SceneLogo::Start()
 // Called each loop iteration
 bool SceneLogo::PreUpdate()
 {
+	OPTICK_EVENT();
 	app->entityManager->Disable();
 
 	if (enableMusic) {
@@ -59,7 +60,7 @@ bool SceneLogo::PreUpdate()
 // Called each loop iteration
 bool SceneLogo::Update(float dt)
 {
-
+	OPTICK_EVENT();
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->controllers[0].buttons[SDL_CONTROLLER_BUTTON_START] == KEY_DOWN) {
 
 		enableMusic = true;
@@ -73,6 +74,8 @@ bool SceneLogo::Update(float dt)
 // Called each loop iteration
 bool SceneLogo::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	app->render->camera.x = 0;

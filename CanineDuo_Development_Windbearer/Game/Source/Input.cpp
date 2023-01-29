@@ -70,6 +70,8 @@ bool Input::Start()
 // Called each loop iteration
 bool Input::PreUpdate()
 {
+	OPTICK_EVENT();
+
 	static SDL_Event event;
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);

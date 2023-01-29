@@ -18,6 +18,9 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+	// Called each loop iteration
+	bool Update(float dt);
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -39,6 +42,13 @@ public:
 
 	uint width;
 	uint height;
+
+	pugi::xml_node configWindow;
+	
+	bool fullscreen;
+	bool borderless;
+	bool resizable;
+	bool fullscreen_window;
 
 private:
 	SString title;

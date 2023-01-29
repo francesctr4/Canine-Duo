@@ -39,7 +39,6 @@ bool EntityManager::Awake(pugi::xml_node& config)
 	}
 
 	return ret;
-
 }
 
 bool EntityManager::Start() {
@@ -81,6 +80,7 @@ bool EntityManager::CleanUp()
 
 Entity* EntityManager::CreateEntity(EntityType type)
 {
+	OPTICK_EVENT();
 	Entity* entity = nullptr; 
 
 	//L02: DONE 2: Instantiate entity according to the type and add the new entoty it to the list of Entities
@@ -91,7 +91,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::PLAYER:
 		entity = new Player();
 		break;
-
+		
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
@@ -126,6 +126,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
+	OPTICK_EVENT();
 	bool ret = true;
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
@@ -143,6 +144,7 @@ bool EntityManager::Update(float dt)
 
 bool EntityManager::LoadState(pugi::xml_node& data)
 {
+	OPTICK_EVENT();
 	float x = data.child("player").attribute("x").as_int();
 	float y = data.child("player").attribute("y").as_int();
 
@@ -165,10 +167,14 @@ bool EntityManager::LoadState(pugi::xml_node& data)
 
 bool EntityManager::SaveState(pugi::xml_node& data)
 {
+	OPTICK_EVENT();
 	pugi::xml_node player = data.append_child("player");
 
 	player.append_attribute("x") = app->scene->player->position.x;
 	player.append_attribute("y") = app->scene->player->position.y;
+
+	playerX = app->scene->player->position.x;
+	playerY = app->scene->player->position.y;
 
 	ListItem<Enemy*>* item;
 
