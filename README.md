@@ -1,6 +1,6 @@
 # Windbearer by Canine Duo
 
-### Repository Link: 
+### Repository Link: [Canine Duo](https://github.com/francesctr4/Canine-Duo)
 
 ### Current release version: Gold
 
