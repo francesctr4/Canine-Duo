@@ -1,6 +1,6 @@
 # Windbearer by Canine Duo
 
-### Current release version: Beta
+### Current release version: Gold
 
 ## Team Members
 
@@ -20,17 +20,19 @@ _**Code & QA:** Francesc Teruel_
 
 ## Game controls
 
+### MOUSE ###
+
+	LEFT_CLICK --> Interact with the UI
+
 ### KEYBOARD ###
 	
-	ENTER --> Move through screens
+	ENTER --> Move through screens (sometimes you have to use the mouse to proceed)
 	
 	A --> Move left
 	D --> Move right
    	SPACE --> Jump (do it again mid-air to double jump)
-
-### GAMEPAD (Not yet implemented) ###
-
-
+	
+	ESC --> Opens the menu (In-Game) or Exits the game (At Title Screen)
 
 ### DEBUG KEYS ###
 
@@ -39,8 +41,10 @@ _**Code & QA:** Francesc Teruel_
 	F4 --> Player instantly dies
 	F5 --> Save the current game state
 	F6 --> Load the previous state 
-	F7 --> Kill all enemies (permanent)
-	F8 --> Reset enemies position
+	F7 --> Move between the different checkpoints
+	F8 --> View GUI bounds rectangles and state in different colors
 	F9 --> View colliders and paths
 	F10 --> God mode (revives the player)
 	F11 --> Toggle 30 FPS cap
+	1 --> Kill all enemies (permanent)
+	2 --> Reset enemies position
