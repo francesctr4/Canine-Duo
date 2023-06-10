@@ -11,15 +11,15 @@
 	<scene />
 	<sceneEnding />
 	<entitymanager>
-		<player x="263" y="195" />
-		<enemy x="796" y="164" />
-		<enemy x="278" y="667" />
+		<player x="358" y="156" />
+		<enemy x="799" y="164" />
+		<enemy x="353" y="705" />
 	</entitymanager>
 	<map />
 	<:anonymous />
 	<:anonymous />
 	<guiManager />
 	<renderer>
-		<camera x="0" y="-18" />
+		<camera x="0" y="-20" />
 	</renderer>
 </save_state>
